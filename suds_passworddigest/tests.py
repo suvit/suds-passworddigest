@@ -13,7 +13,6 @@ class SudsTest(unittest.TestCase):
         token.password = 'test'
         token.nonce = base64.decodestring("8kqcOS9SFYxSRslITbBmlw==")
         token.created = "2012-10-29T08:18:34.836Z"
-        print token.created
 
         self.assertEquals(token.generate_digest(),
                           "LOzA3VPv+2hFGOHq8O6gcEXsc/k=")
