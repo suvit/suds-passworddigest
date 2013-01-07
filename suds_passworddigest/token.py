@@ -16,6 +16,21 @@ wsenctype = ('EncodingType',
 
 
 class UsernameDigestToken(UsernameToken):
+
+    def setcreated(self, *args, **kwargs):
+        super(UsernameDigestToken, self).setcreates(*args, **kwargs)
+        self.created = str(UTC(self.created))
+
+    def generate_digest(self):
+        if self.nonce is None:
+           self.setnonce()
+        if self.created is None:
+           self.setcreated()
+        sha1 = hashlib.sha1(str(self.nonce) + \
+                            str(self.created) + self.password)
+        digest = base64.encodestring(sha1.digest())[:-1]
+        return digest
+
     def xml(self):
         """
         Get xml representation of the object.
@@ -29,23 +44,17 @@ class UsernameDigestToken(UsernameToken):
         root.append(u)
 
         p = Element('Password', ns=wssens)
-        if self.nonce is None:
-           self.setnonce()
-        if self.created is None:
-           self.setcreated()
-        sha1 = hashlib.sha1(str(self.nonce) + \
-                            str(UTC(self.created)) + self.password)
-        p.setText(base64.b64encode(sha1.digest()))
+        p.setText(self.generate_digest())
         p.set(wspassd[0], wspassd[1])
         root.append(p)
 
         n = Element('Nonce', ns=wssens)
-        n.setText(base64.b64encode(self.nonce))
+        n.setText(base64.encodestring(self.nonce)[:-1])
         n.set(wsenctype[0], wsenctype[1])
         root.append(n)
 
         n = Element('Created', ns=wsuns)
-        n.setText(str(UTC(self.created)))
+        n.setText(self.created)
         root.append(n)
 
         return root
