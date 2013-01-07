@@ -6,7 +6,7 @@ from time import time, strftime, gmtime
 
 from suds.sax.element import Element
 from suds.sax.date import UTC
-from suds.wsse import UsernameToken, wssens
+from suds.wsse import UsernameToken, wssens, wsuns
 
 
 wspassd = ('Type',
