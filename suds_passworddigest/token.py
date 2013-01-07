@@ -18,7 +18,7 @@ wsenctype = ('EncodingType',
 class UsernameDigestToken(UsernameToken):
 
     def setcreated(self, *args, **kwargs):
-        super(UsernameDigestToken, self).setcreates(*args, **kwargs)
+        UsernameToken.setcreated(self, *args, **kwargs)
         self.created = str(UTC(self.created))
 
     def generate_digest(self):
