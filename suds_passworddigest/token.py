@@ -21,6 +21,10 @@ class UsernameDigestToken(UsernameToken):
         UsernameToken.setcreated(self, *args, **kwargs)
         self.created = str(UTC(self.created))
 
+    def reset(self):
+        self.nonce = None
+        self.created = None
+
     def generate_digest(self):
         if self.nonce is None:
            self.setnonce()
@@ -57,4 +61,5 @@ class UsernameDigestToken(UsernameToken):
         n.setText(self.created)
         root.append(n)
 
+        self.reset()
         return root
