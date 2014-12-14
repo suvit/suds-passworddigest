@@ -21,7 +21,7 @@ Usage
     from suds.client import Client
     from suds.wsse import Security
 
-    from suds_passworddigest import UsernameDigestToken
+    from suds_passworddigest.token import UsernameDigestToken
 
     client = Client()
     security = Security()
