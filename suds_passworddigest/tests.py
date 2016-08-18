@@ -1,7 +1,6 @@
 import unittest
 import base64
 
-from suds.sax.date import DateTime, UTC
 from suds_passworddigest.token import UsernameDigestToken
 
 class SudsTest(unittest.TestCase):
