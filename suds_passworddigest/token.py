@@ -5,7 +5,14 @@ import hashlib
 from time import time, strftime, gmtime
 
 from suds.sax.element import Element
-from suds.sax.date import UTC
+
+try:
+    from suds.sax.date import UtcTimezone
+    is_debian_based = True
+except ImportError:
+    from suds.sax.date import UTC
+    is_debian_based = False
+
 from suds.wsse import UsernameToken, wssens, wsuns
 
 
@@ -19,7 +26,10 @@ class UsernameDigestToken(UsernameToken):
 
     def setcreated(self, *args, **kwargs):
         UsernameToken.setcreated(self, *args, **kwargs)
-        self.created = str(UTC(self.created))
+        if is_debian_based:
+            self.created = str(self.created.replace(tzinfo=UtcTimezone()))
+        else:
+            self.created = str(UTC(self.created))
 
     def reset(self):
         self.nonce = None
